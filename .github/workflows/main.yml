@@ -1,0 +1,21 @@
+name: Build GSpad ELF
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup PS5SDK
+        uses: ps5dev/setup-ps5sdk@main
+      - name: Build
+        run: make
+      - name: Upload elf
+        uses: actions/upload-artifact@v4
+        with:
+          name: GSpad-elf
+          path: GSpad-DS4modle-auto-reconnect.elf
