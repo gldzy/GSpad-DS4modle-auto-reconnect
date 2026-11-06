@@ -10,14 +10,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: sudo apt update && sudo apt install -y wget tar
-
-      - name: Download prebuilt ps5-payload-sdk
+      - name: Install build deps
         run: |
-          wget https://github.com/ps5-payload-dev/sdk/releases/download/v0.43/ps5-payload-sdk-linux-x86_64.tar.xz
-          tar -xf ps5-payload-sdk-linux-x86_64.tar.xz
-          echo "PS5_PAYLOAD_SDK=$PWD/ps5-payload-sdk" >> $GITHUB_ENV
+          sudo apt update
+          sudo apt install -y clang-18 lld-18 git make
+
+      - name: Clone SDK source（带镜像加速）
+        run: |
+          git clone --depth=1 --branch main https://ghproxy.com/https://github.com/ps5-payload-dev/sdk.git
+          cd sdk
+          make
+          echo "PS5_PAYLOAD_SDK=$PWD" >> $GITHUB_ENV
 
       - name: Build ELF
         run: make
