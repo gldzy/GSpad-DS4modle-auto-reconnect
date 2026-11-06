@@ -8,13 +8,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout source
         uses: actions/checkout@v4
-      - name: Setup PS5SDK
-        uses: ps5dev/setup-ps5sdk@main
-      - name: Build
+
+      - name: Install ps5-payload-sdk
+        run: |
+          git clone https://github.com/ps5-payload-dev/sdk.git /opt/ps5-payload-sdk
+          cd /opt/ps5-payload-sdk
+          make
+          echo "PS5SDK_PATH=/opt/ps5-payload-sdk" >> $GITHUB_ENV
+
+      - name: Build ELF
         run: make
-      - name: Upload elf
+
+      - name: Upload compiled elf
         uses: actions/upload-artifact@v4
         with:
           name: GSpad-elf
