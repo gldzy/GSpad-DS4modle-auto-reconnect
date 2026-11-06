@@ -10,8 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup ps5-payload-sdk
-        uses: ps5-payload-dev/setup-sdk@main
+      - name: Install dependencies
+        run: sudo apt update && sudo apt install -y wget tar
+
+      - name: Download prebuilt ps5-payload-sdk
+        run: |
+          wget https://github.com/ps5-payload-dev/sdk/releases/download/v0.43/ps5-payload-sdk-linux-x86_64.tar.xz
+          tar -xf ps5-payload-sdk-linux-x86_64.tar.xz
+          echo "PS5_PAYLOAD_SDK=$PWD/ps5-payload-sdk" >> $GITHUB_ENV
 
       - name: Build ELF
         run: make
