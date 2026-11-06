@@ -8,20 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install system dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y build-essential clang lld wget
-
-      - name: Clone ps5-payload-sdk
-        run: |
-          git clone https://github.com/ps5-payload-dev/sdk.git ./ps5-payload-sdk
-          cd ./ps5-payload-sdk
-          make
-          echo "PS5_PAYLOAD_SDK=$PWD" >> $GITHUB_ENV
+      - name: Setup ps5-payload-sdk
+        uses: ps5-payload-dev/setup-sdk@main
 
       - name: Build ELF
         run: make
