@@ -17,6 +17,7 @@ jobs:
 
       - name: Clone SDK source
         run: |
+          set -e
           for i in {1..3}; do
             git clone --depth=1 https://github.com/ps5-payload-dev/sdk.git && break
             echo "Clone failed, retry $i/3"
